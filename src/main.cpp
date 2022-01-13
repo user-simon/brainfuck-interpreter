@@ -7,7 +7,7 @@
 
 constexpr std::int32_t memory_size = 30'000;
 
-void execute(std::string_view program)
+static void execute(std::string_view program)
 {
     // init memory
 
