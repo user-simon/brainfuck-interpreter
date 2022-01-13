@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 
     const std::string program = [&]()
     {
-        if (argc > 1)
+        if (argc > 1) // dump file to string
         {
             std::ifstream stream{ argv[1] };
             return std::string{ std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>() };
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
             else
                 stack.pop();
             break;
-        default:
+        default: // ignore all other characters
             break;
         }
     }
