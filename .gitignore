@@ -1,0 +1,18 @@
+# Build
+x64/
+Debug/
+Release/
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.filters
+*.user
+*.config
+
+# CMake
+*.cmake
+CMakeFiles/
+CMakeSettings.json
+CMakeCache.txt
