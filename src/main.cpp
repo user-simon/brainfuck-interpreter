@@ -5,7 +5,7 @@
 #include <sstream>
 #include <stdexcept>
 
-constexpr std::int32_t memory_size = 30'000;
+constexpr std::size_t memory_size = 30'000;
 
 static void execute(std::string_view program)
 {
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
         if (argc > 1) // dump file to string
         {
             std::ifstream stream{ argv[1] };
-            return std::string{ std::istreambuf_iterator<char>{ stream }, std::istreambuf_iterator<char>{} };
+            return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
         }
         else // read from terminal
         {
