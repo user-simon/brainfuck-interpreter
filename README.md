@@ -13,4 +13,4 @@ Either supply a path to the "code" as a command-line argument or open the progra
 
 ## Error handling
 
-None.
+Some.

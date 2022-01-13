@@ -3,49 +3,38 @@
 #include <memory>
 #include <stack>
 #include <sstream>
+#include <stdexcept>
 
-int main(int argc, char* argv[])
+constexpr std::int32_t memory_size = 30'000;
+
+void execute(std::string_view program)
 {
-    // init program
-
-    const std::string program = [&]()
-    {
-        if (argc > 1) // dump file to string
-        {
-            std::ifstream stream{ argv[1] };
-            return std::string{ std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>() };
-        }
-        else // read from terminal
-        {
-            std::string buf;
-            std::getline(std::cin, buf);
-            return buf;
-        }
-    }();
-
     // init memory
 
-    std::unique_ptr<std::uint8_t[]> memory = std::make_unique<std::uint8_t[]>(30'000);
+    std::unique_ptr<std::uint8_t[]> memory = std::make_unique<std::uint8_t[]>(memory_size);
     std::uint8_t* head = memory.get();
     std::stack<std::size_t> stack;
 
-    // utility function for "jumping" i forward to the next matching ']'
+    // utility function for "jumping" i to the matching closing brace
 
     auto jump_forward = [&](std::size_t& i)
     {
-        std::int32_t matching = -1;
+        std::int32_t closes_needed = 1;
 
-        while (matching != 0)
+        while (closes_needed != 0)
         {
-            const char c = program[++i];
+            if (++i >= program.length())
+                throw std::runtime_error("unmatched '['");
+
+            const char c = program[i];
 
             if (c == '[')
-                --matching;
+                ++closes_needed;
             else if (c == ']')
-                ++matching;
+                --closes_needed;
         }
     };
-    
+
     // execute program
 
     for (std::size_t i = 0; i < program.length(); ++i)
@@ -53,10 +42,12 @@ int main(int argc, char* argv[])
         switch (program[i])
         {
         case '>':
-            ++head;
+            if (++head >= (memory.get() + memory_size))
+                throw std::runtime_error("head out of bounds: right");
             break;
         case '<':
-            --head;
+            if (--head < memory.get())
+                throw std::runtime_error("head out of bounds: left");
             break;
         case '+':
             ++*head;
@@ -76,7 +67,9 @@ int main(int argc, char* argv[])
                 jump_forward(i);
             break;
         case ']':
-            if (*head)
+            if (stack.empty())
+                throw std::runtime_error("unmatched ']'");
+            else if (*head)
                 i = stack.top();
             else
                 stack.pop();
@@ -84,6 +77,38 @@ int main(int argc, char* argv[])
         default: // ignore all other characters
             break;
         }
+    }
+}
+
+int main(int argc, char* argv[])
+{
+    // init program
+
+    const std::string program = [&]()
+    {
+        if (argc > 1) // dump file to string
+        {
+            std::ifstream stream{ argv[1] };
+            return std::string{ std::istreambuf_iterator<char>{ stream }, std::istreambuf_iterator<char>{} };
+        }
+        else // read from terminal
+        {
+            std::string buf;
+            std::getline(std::cin, buf);
+            return buf;
+        }
+    }();
+
+    // execute program
+
+    try
+    {
+        execute(program);
+    }
+    catch (std::runtime_error& e)
+    {
+        using namespace std::string_literals;
+        std::cout << "Error: "s + e.what();
     }
     return 0;
 }
