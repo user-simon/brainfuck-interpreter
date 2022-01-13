@@ -1,6 +1,5 @@
 <h1 align="center" width="100%">Torx</h1>
-<h2 align="center" width="100%"><i>A (stupid) simple <a href="https://en.wikipedia.org/wiki/Brainfuck">brainfuck</a> interpretor</i></h2>
-
+<h4 align="center" width="100%"><i>A (stupid) simple <a href="https://en.wikipedia.org/wiki/Brainfuck">brainfuck</a> interpretor</i></h4>
 
 ## Building
 
