@@ -10,3 +10,7 @@
 ## How to use
 
 Either supply a path to the "code" as a command-line argument or open the program and enter the code directly into the terminal.
+
+## Error handling
+
+None.
