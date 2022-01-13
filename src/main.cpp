@@ -40,23 +40,23 @@ int main(int argc, char* argv[])
             const char c = program[++i];
 
             if (c == '[')
-                matching--;
+                --matching;
             else if (c == ']')
-                matching++;
+                ++matching;
         }
     };
     
     // execute program
 
-    for (std::size_t i = 0; i < program.length(); i++)
+    for (std::size_t i = 0; i < program.length(); ++i)
     {
         switch (program[i])
         {
         case '>':
-            head++;
+            ++head;
             break;
         case '<':
-            head--;
+            --head;
             break;
         case '+':
             ++*head;
